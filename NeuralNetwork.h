@@ -5,23 +5,17 @@
 #include <vector>
 #include <Eigen/Dense>
 
-using namespace std;
 using namespace Eigen;
 
 class NeuralNetwork {
 public:
-    NeuralNetwork(const vector<int>& layer_sizes);
-
-    // Method to set custom weights for all layers
-    void setWeights(const vector<MatrixXd>& custom_weights);
-    vector<MatrixXd>* getWeights();
-   
-    MatrixXd forward(const MatrixXd& X, const string& activation = "relu");
-
+    NeuralNetwork(const std::vector<int>& layer_sizes);
+    void setWeights(const std::vector<MatrixXf>& custom_weights);
+    std::vector<MatrixXf> getWeights();
+    MatrixXf forward(const MatrixXf& X, const std::string& activation = "relu");
     void printWeights();
-
 private:
-    vector<MatrixXd> weights; // Weights for each layer
+    std::vector<MatrixXf> weights; // Weights for each layer
 };
 
 #endif

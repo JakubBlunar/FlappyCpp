@@ -1,7 +1,7 @@
 // Helper function to save weights to a file
 #include "NeuralNetworkHelpers.h"
 
-void NeuralNetworkHelpers::saveWeights(const vector<MatrixXd>& weights, const string& filename) {
+void NeuralNetworkHelpers::saveWeights(const vector<MatrixXf>& weights, const string& filename) {
     ofstream file(filename);
     if (file.is_open()) {
         for (const auto& weight : weights) {
@@ -16,14 +16,14 @@ void NeuralNetworkHelpers::saveWeights(const vector<MatrixXd>& weights, const st
     }
 }
 
-vector<MatrixXd> NeuralNetworkHelpers::loadWeights(const string& filename)
+vector<MatrixXf> NeuralNetworkHelpers::loadWeights(const string& filename)
 {
     ifstream file(filename);
-    vector<MatrixXd> weights;
+    vector<MatrixXf> weights;
     if (file.is_open()) {
         int rows, cols;
         while (file >> rows >> cols) {
-            MatrixXd weight(rows, cols);
+            MatrixXf weight(rows, cols);
             for (int i = 0; i < rows; ++i) {
                 for (int j = 0; j < cols; ++j) {
                     file >> weight(i, j);

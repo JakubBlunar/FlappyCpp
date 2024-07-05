@@ -1,44 +1,49 @@
 #include "NeuralNetwork.h"
 #include <functional>
 
-MatrixXd relu(const MatrixXd& x) {
+MatrixXf relu(const MatrixXf& x) {
     return x.cwiseMax(0);
 }
 
-MatrixXd sigmoid(const MatrixXd& x) {
+MatrixXf sigmoid(const MatrixXf& x) {
     return 1.0 / (1.0 + (-x.array()).exp());
 }
 
-MatrixXd tanh(const MatrixXd& x) {
+MatrixXf tanh(const MatrixXf& x) {
     return x.array().tanh();
 }
 
-MatrixXd softmax(const MatrixXd& x) {
-    MatrixXd exps = (x.array() - x.maxCoeff()).exp();
+MatrixXf softmax(const MatrixXf& x) {
+    MatrixXf exps = (x.array() - x.maxCoeff()).exp();
     return exps / exps.sum();
 }
 
-MatrixXd leakyRelu(const MatrixXd& x, float alpha = 0.01) {
+MatrixXf leakyRelu(const MatrixXf& x, float alpha = 0.01) {
     return x.cwiseMax(alpha * x);
 }
 
-NeuralNetwork::NeuralNetwork(const vector<int>& layer_sizes)
+NeuralNetwork::NeuralNetwork(const std::vector<int>& layer_sizes)
 {
 	for (size_t i = 1; i < layer_sizes.size(); ++i) {
-		weights.push_back(MatrixXd::Random(layer_sizes[i], layer_sizes[i - 1]));
+		weights.push_back(MatrixXf::Random(layer_sizes[i], layer_sizes[i - 1]));
 	}
 }
 
-void NeuralNetwork::setWeights(const vector<MatrixXd>& custom_weights)
+void NeuralNetwork::setWeights(const std::vector<MatrixXf>& custom_weights)
 {
 	weights = custom_weights;
 }
 
-MatrixXd NeuralNetwork::forward(const MatrixXd& X, const string& activation)
+std::vector<MatrixXf> NeuralNetwork::getWeights()
 {
-    MatrixXd A = X;
+    return weights;
+}
+
+MatrixXf NeuralNetwork::forward(const MatrixXf& X, const std::string& activation)
+{
+    MatrixXf A = X;
     for (size_t i = 0; i < weights.size(); ++i) {
-        MatrixXd Z = weights[i] * A;
+        MatrixXf Z = weights[i] * A;
         if (activation == "relu") {
             A = relu(Z);
         }
@@ -46,7 +51,7 @@ MatrixXd NeuralNetwork::forward(const MatrixXd& X, const string& activation)
             A = sigmoid(Z);
         }
         else {
-            throw invalid_argument("Unsupported activation function");
+            throw std::invalid_argument("Unsupported activation function");
         }
     }
     return A;
@@ -55,6 +60,6 @@ MatrixXd NeuralNetwork::forward(const MatrixXd& X, const string& activation)
 void NeuralNetwork::printWeights()
 {
     for (size_t i = 0; i < weights.size(); ++i) {
-        cout << "Weights of layer " << i + 1 << ":\n" << weights[i] << endl;
+        std::cout << "Weights of layer " << i + 1 << ":\n" << weights[i] << std::endl;
     }
 }

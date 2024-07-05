@@ -12,8 +12,8 @@ using namespace Eigen;
 class NeuralNetworkHelpers
 {
     public:
-        static void saveWeights(const vector<MatrixXd>& weights, const string& filename);
-        static vector<MatrixXd> loadWeights(const string& filename);
+        static void saveWeights(const vector<MatrixXf>& weights, const string& filename);
+        static vector<MatrixXf> loadWeights(const string& filename);
 };
 
 #endif
